@@ -385,6 +385,17 @@ build_ievm() {
     local ova=`basename "${archive/_/ - }" .zip`.ova
 
     local url
+    case "$version" in
+    "6")
+        url="https://web.archive.org/web/20140327213333/http://virtualization.modern.ie/vhd/IEKitV1_Final/VirtualBox/OSX/IE6_WinXP.zip"
+        ;;
+    "7")
+        url="https://web.archive.org/web/20140327213035/http://virtualization.modern.ie/vhd/IEKitV1_Final/VirtualBox/OSX/IE7_Vista.zip"
+        ;;
+    "8"|"9"|"10")
+        url="https://az412801.vo.msecnd.net/vhd/VMBuild_20141027/VirtualBox/IE${version}/Windows/IE${version}.Win7.For.Windows.VirtualBox.zip"
+        ;;
+    esac
     if [ "${os}" == "Win10" ]
     then
         url="https://az792536.vo.msecnd.net/vms/VMBuild_20150801/VirtualBox/MSEdge/Mac/Microsoft%20Edge.Win10.For.Mac.VirtualBox.zip"
@@ -401,7 +412,7 @@ build_ievm() {
         IE10_Win8.zip) md5="cc4e2f4b195e1b1e24e2ce6c7a6f149c" ;;
         MSEdge_Win10.zip) md5="c1011b491d49539975fb4c3eeff16dae" ;;
     esac
-    
+
     log "Checking for existing OVA at ${ievms_home}/${ova}"
     if [[ ! -f "${ova}" ]]
     then
@@ -427,7 +438,7 @@ build_ievm() {
 
         log "Tagging VM with ievms version"
         VBoxManage setextradata "${vm}" "ievms" "{\"version\":\"${ievms_version}\"}"
-        
+
         log "Creating clean snapshot"
         VBoxManage snapshot "${vm}" take clean --description "The initial VM state"
     fi
